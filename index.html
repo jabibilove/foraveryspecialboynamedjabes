@@ -17,22 +17,6 @@ body{
   box-sizing:border-box;
 }
 
-/* floating hearts */
-.heart{
-  position:absolute;
-  width:10px;
-  height:10px;
-  background:#ffd6e8;
-  transform:rotate(45deg);
-  animation:float 10s linear infinite;
-  opacity:.6;
-}
-
-@keyframes float{
-  from{transform:translateY(100vh) rotate(45deg);}
-  to{transform:translateY(-10vh) rotate(45deg);}
-}
-
 .hidden{display:none;}
 
 .intro,.main{
@@ -51,6 +35,22 @@ body{
   box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
 
+/* floating hearts */
+.heart{
+  position:absolute;
+  width:10px;
+  height:10px;
+  background:#ffd6e8;
+  transform:rotate(45deg);
+  animation:float 10s linear infinite;
+  opacity:.6;
+}
+
+@keyframes float{
+  from{transform:translateY(100vh) rotate(45deg);}
+  to{transform:translateY(-10vh) rotate(45deg);}
+}
+
 /* quote bubbles */
 .quote{
   position:absolute;
@@ -59,13 +59,13 @@ body{
   border-radius:14px;
   font-size:11px;
   color:#1f3b63;
-  opacity:.8;
+  opacity:.85;
   animation:float 14s linear infinite;
 }
 
 /* buttons */
 button{
-  background:rgba(255,255,255,.85);
+  background:rgba(255,255,255,.9);
   border:none;
   border-radius:30px;
   padding:12px 22px;
@@ -75,7 +75,6 @@ button{
   transition:.3s;
 }
 
-/* heartbeat animation */
 @keyframes beat{
   0%{transform:scale(1);}
   50%{transform:scale(1.08);}
@@ -111,105 +110,97 @@ button{
 
 <body>
 
-<!-- MUSIC -->
 <audio id="music" loop>
   <source src="fall-in-love-with-you.mp3.mp3">
 </audio>
 
-<!-- INTRO PAGE -->
 <div class="intro" id="intro">
   <p>I’ve been thinking about something for a while.<br>
   If you would like to continue, press the photo.</p>
-  
-  <img src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg.jpg" onclick="enterSite()">
+  <img id="enterPhoto" src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg.jpg">
 </div>
 
-<!-- MAIN PAGE -->
 <div class="main hidden" id="main">
   <div>Jabes will you do me the honor of being my valentine</div>
   <div style="font-size:11px;margin-bottom:30px;opacity:.7;">
     (even if it’s just as a friend :))
   </div>
 
-  <button class="yesbtn" onclick="yes()">yes of course</button>
-  <button onmouseover="run(this)" onclick="no()">no, I’m sorry but I love you</button>
+  <button class="yesbtn" id="yesBtn">yes of course</button>
+  <button id="noBtn">no, I’m sorry but I love you</button>
 
   <div id="yesMessage">okay yay, i was a little nervous asking 💙</div>
 </div>
 
 <script>
 
+/* attach click reliably */
+document.getElementById("enterPhoto").addEventListener("click", function(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("main").classList.remove("hidden");
+  document.getElementById("music").play();
+});
+
 /* floating hearts */
 for(let i=0;i<30;i++){
- let h=document.createElement("div")
- h.className="heart"
- h.style.left=Math.random()*100+"vw"
- h.style.animationDuration=8+Math.random()*5+"s"
- document.body.appendChild(h)
+ let h=document.createElement("div");
+ h.className="heart";
+ h.style.left=Math.random()*100+"vw";
+ h.style.animationDuration=8+Math.random()*5+"s";
+ document.body.appendChild(h);
 }
 
-/* lots of quote bubbles */
+/* lots of quotes */
 let words=[
 "you’re cute","hi :)","thinking of you","wink",
 "cutie","be mine?","hey you","smile",
 "idk i like you","hi jabes","miss you",
 "soft boy","okay hi","you matter"
-]
+];
 
 for(let i=0;i<28;i++){
- let q=document.createElement("div")
- q.className="quote"
- q.innerText=words[Math.floor(Math.random()*words.length)]
- q.style.left=Math.random()*100+"vw"
- q.style.top=Math.random()*100+"vh"
- document.body.appendChild(q)
+ let q=document.createElement("div");
+ q.className="quote";
+ q.innerText=words[Math.floor(Math.random()*words.length)];
+ q.style.left=Math.random()*100+"vw";
+ q.style.top=Math.random()*100+"vh";
+ document.body.appendChild(q);
 }
 
-/* switch pages */
-function enterSite(){
- document.getElementById("intro").style.display="none"
- document.getElementById("main").classList.remove("hidden")
- document.getElementById("music").play()
-}
-
-/* yes click */
-function yes(){
+/* yes */
+document.getElementById("yesBtn").addEventListener("click", function(){
  for(let i=0;i<90;i++){
-  let h=document.createElement("div")
-  h.className="burst"
-  h.innerHTML="❤️"
-  h.style.left="50%"
-  h.style.top="50%"
-  h.style.fontSize=14+Math.random()*30+"px"
-  h.style.setProperty("--x",(Math.random()*500-250)+"px")
-  h.style.setProperty("--y",(Math.random()*500-250)+"px")
-  document.body.appendChild(h)
-  setTimeout(()=>h.remove(),2000)
+  let h=document.createElement("div");
+  h.className="burst";
+  h.innerHTML="❤️";
+  h.style.left="50%";
+  h.style.top="50%";
+  h.style.fontSize=14+Math.random()*30+"px";
+  h.style.setProperty("--x",(Math.random()*500-250)+"px");
+  h.style.setProperty("--y",(Math.random()*500-250)+"px");
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),2000);
  }
- document.getElementById("yesMessage").style.opacity=1
-}
+ document.getElementById("yesMessage").style.opacity=1;
+});
 
 /* runaway no */
-function run(b){
- b.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`
-}
-
-function no(){
- alert("still love you 💙")
-}
+document.getElementById("noBtn").addEventListener("mouseover", function(){
+ this.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`;
+});
 
 /* heart trail */
 document.addEventListener("mousemove",e=>{
- let h=document.createElement("div")
- h.innerHTML="💗"
- h.style.position="absolute"
- h.style.left=e.pageX+"px"
- h.style.top=e.pageY+"px"
- h.style.fontSize="10px"
- document.body.appendChild(h)
- setTimeout(()=>h.remove(),600)
-})
-</script>
+ let h=document.createElement("div");
+ h.innerHTML="💗";
+ h.style.position="absolute";
+ h.style.left=e.pageX+"px";
+ h.style.top=e.pageY+"px";
+ h.style.fontSize="10px";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),600);
+});
 
+</script>
 </body>
 </html>
