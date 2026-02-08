@@ -10,11 +10,20 @@ body{
   margin:0;
   height:100vh;
   background:linear-gradient(135deg,#cfe9ff,#a7cfff,#e6f0ff);
+  background-size:200% 200%;
+  animation:gradientMove 12s ease infinite;
   overflow:hidden;
   font-family:Arial, sans-serif;
   color:#1f3b63;
   border:12px solid #ffd6e8;
   box-sizing:border-box;
+  transition:background 2s ease;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
 .hidden{display:none;}
@@ -52,7 +61,7 @@ body{
   to{transform:translateY(-10vh) rotate(45deg);}
 }
 
-/* QUOTE BUBBLES — FIXED */
+/* quote bubbles */
 .quote{
   position:absolute;
   background:#ffd6e8;
@@ -62,7 +71,7 @@ body{
   color:#1f3b63;
   opacity:.85;
   animation:float 14s linear infinite;
-  pointer-events:none; /* THIS makes them not block clicks */
+  pointer-events:none;
 }
 
 /* buttons */
@@ -77,7 +86,7 @@ button{
   transition:.3s;
 }
 
-/* heartbeat animation */
+/* heartbeat */
 @keyframes beat{
   0%{transform:scale(1);}
   50%{transform:scale(1.08);}
@@ -90,15 +99,30 @@ button{
 
 .yesbtn:hover{
   transform:scale(1.18);
-  box-shadow:0 0 20px #ff9fcf;
+  box-shadow:0 0 25px #ff9fcf, 0 0 45px #ffd6e8;
 }
 
-#yesMessage{
-  margin-top:20px;
+/* maybe button */
+.maybe{
+  opacity:.7;
+  font-size:12px;
+  padding:8px 14px;
+}
+
+/* flash overlay */
+.flash{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
   opacity:0;
-  transition:opacity 1s;
+  pointer-events:none;
+  transition:opacity .4s;
 }
 
+/* confetti hearts */
 .burst{
   position:absolute;
   animation:burst 2s forwards;
@@ -109,106 +133,171 @@ button{
   from{transform:scale(0);opacity:1;}
   to{transform:scale(1.4) translate(var(--x),var(--y));opacity:0;}
 }
+
+#yesMessage{
+  margin-top:20px;
+  opacity:0;
+  transition:opacity 1s;
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" style="
+position:fixed;
+top:0;left:0;width:100%;height:100%;
+background:linear-gradient(135deg,#cfe9ff,#a7cfff,#e6f0ff);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:9999;
+font-size:18px;
+color:#1f3b63;
+transition:opacity .8s ease;
+">
+<div>loading feelings…</div>
+<div style="font-size:12px;margin-top:6px;">building courage…</div>
+</div>
+
+<div class="flash" id="flash"></div>
+
 <audio id="music" loop>
-  <source src="fall-in-love-with-you.mp3.mp3">
+<source src="fall-in-love-with-you.mp3.mp3">
 </audio>
 
 <div class="intro" id="intro">
-  <p>I’ve been thinking about something for a while.<br>
-  If you would like to continue, press the photo.</p>
-  <img id="enterPhoto" src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg.jpg">
+<p>I’ve been thinking about something for a while.<br>
+If you would like to continue, press the photo.</p>
+<img id="enterPhoto" src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg.jpg">
 </div>
 
 <div class="main hidden" id="main">
-  <div>Jabes will you do me the honor of being my valentine</div>
-  <div style="font-size:11px;margin-bottom:30px;opacity:.7;">
-    (even if it’s just as a friend :))
-  </div>
+<div>Jabes will you do me the honor of being my valentine</div>
+<div style="font-size:11px;margin-bottom:30px;opacity:.7;">
+(even if it’s just as a friend :))
+</div>
 
-  <button class="yesbtn" id="yesBtn">yes of course</button>
-  <button id="noBtn">no, I’m sorry but I love you</button>
+<button class="yesbtn" id="yesBtn">yes of course</button>
+<button id="noBtn">no, I’m sorry but I love you</button>
+<button class="maybe" id="maybeBtn">maybe 😳</button>
 
-  <div id="yesMessage">okay yay, i was a little nervous asking 💙</div>
+<div id="yesMessage">okay yay, i was a little nervous asking 💙</div>
 </div>
 
 <script>
 
-/* click photo — reliable */
-document.getElementById("enterPhoto").addEventListener("click", function(){
-  document.getElementById("intro").style.display="none";
-  document.getElementById("main").classList.remove("hidden");
-  document.getElementById("music").play();
+/* loading screen */
+window.addEventListener("load",function(){
+ setTimeout(()=>{
+  const s=document.getElementById("loadingScreen");
+  s.style.opacity="0";
+  s.style.pointerEvents="none";
+  setTimeout(()=>s.remove(),800);
+ },1400);
+});
+
+/* enter site */
+document.getElementById("enterPhoto").addEventListener("click",function(){
+ document.getElementById("intro").style.display="none";
+ document.getElementById("main").classList.remove("hidden");
+ const music=document.getElementById("music");
+ music.volume=.3;
+ music.play();
 });
 
 /* floating hearts */
 for(let i=0;i<30;i++){
- let h=document.createElement("div")
- h.className="heart"
- h.style.left=Math.random()*100+"vw"
- h.style.animationDuration=8+Math.random()*5+"s"
- document.body.appendChild(h)
+ let h=document.createElement("div");
+ h.className="heart";
+ h.style.left=Math.random()*100+"vw";
+ h.style.animationDuration=8+Math.random()*5+"s";
+ document.body.appendChild(h);
 }
 
-/* MANY quote bubbles but avoid center area */
+/* quotes */
 let words=[
 "you’re cute","hi :)","thinking of you","wink",
 "cutie","be mine?","hey you","smile",
 "idk i like you","hi jabes","miss you",
-"soft boy","okay hi","you matter"
-]
+"soft boy","okay hi","you matter",
+"you make me smile","i like being around you",
+"you feel familiar","you calm me"
+];
 
-for(let i=0;i<28;i++){
- let q=document.createElement("div")
- q.className="quote"
- q.innerText=words[Math.floor(Math.random()*words.length)]
- q.style.left=Math.random()*100+"vw"
+for(let i=0;i<30;i++){
+ let q=document.createElement("div");
+ q.className="quote";
+ q.innerText=words[Math.floor(Math.random()*words.length)];
+ q.style.left=Math.random()*100+"vw";
 
- let pos=Math.random()*100
+ let pos=Math.random()*100;
  if(pos>35 && pos<65){pos+=25}
- q.style.top=pos+"vh"
+ q.style.top=pos+"vh";
 
- document.body.appendChild(q)
+ document.body.appendChild(q);
 }
 
-/* YES */
-document.getElementById("yesBtn").addEventListener("click", function(){
+/* yes click */
+document.getElementById("yesBtn").addEventListener("click",function(){
+
+ // flash
+ const f=document.getElementById("flash");
+ f.style.opacity=.7;
+ setTimeout(()=>f.style.opacity=0,300);
+
+ // confetti
  for(let i=0;i<90;i++){
-  let h=document.createElement("div")
-  h.className="burst"
-  h.innerHTML="❤️"
-  h.style.left="50%"
-  h.style.top="50%"
-  h.style.fontSize=14+Math.random()*30+"px"
-  h.style.setProperty("--x",(Math.random()*500-250)+"px")
-  h.style.setProperty("--y",(Math.random()*500-250)+"px")
-  document.body.appendChild(h)
-  setTimeout(()=>h.remove(),2000)
+  let h=document.createElement("div");
+  h.className="burst";
+  h.innerHTML="❤️";
+  h.style.left="50%";
+  h.style.top="50%";
+  h.style.fontSize=14+Math.random()*30+"px";
+  h.style.setProperty("--x",(Math.random()*500-250)+"px");
+  h.style.setProperty("--y",(Math.random()*500-250)+"px");
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),2000);
  }
- document.getElementById("yesMessage").style.opacity=1
-})
+
+ // message
+ document.getElementById("yesMessage").style.opacity=1;
+
+ // warm background
+ document.body.style.background="linear-gradient(135deg,#ffd6e8,#ffcce0,#cfe9ff)";
+
+ // music swell
+ const m=document.getElementById("music");
+ let vol=m.volume;
+ let grow=setInterval(()=>{
+  if(vol<.8){vol+=.02;m.volume=vol}else clearInterval(grow);
+ },200);
+});
+
+/* maybe click */
+document.getElementById("maybeBtn").addEventListener("click",function(){
+ document.getElementById("yesMessage").style.opacity=1;
+});
 
 /* runaway no */
-document.getElementById("noBtn").addEventListener("mouseover", function(){
+document.getElementById("noBtn").addEventListener("mouseover",function(){
  this.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`
-})
+});
 
 /* heart trail */
 document.addEventListener("mousemove",e=>{
- let h=document.createElement("div")
- h.innerHTML="💗"
- h.style.position="absolute"
- h.style.left=e.pageX+"px"
- h.style.top=e.pageY+"px"
- h.style.fontSize="10px"
- h.style.pointerEvents="none"
- document.body.appendChild(h)
- setTimeout(()=>h.remove(),600)
-})
+ let h=document.createElement("div");
+ h.innerHTML="💗";
+ h.style.position="absolute";
+ h.style.left=e.pageX+"px";
+ h.style.top=e.pageY+"px";
+ h.style.fontSize="10px";
+ h.style.pointerEvents="none";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),600);
+});
 </script>
 
 </body>
