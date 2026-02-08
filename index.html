@@ -7,37 +7,18 @@
 
 <style>
 body {
-  margin: 0;
-  height: 100vh;
-  background: linear-gradient(135deg,#cfe9ff,#a7cfff,#e6f0ff);
-  overflow: hidden;
-  font-family: Arial, sans-serif;
+  margin:0;
+  height:100vh;
+  background:linear-gradient(135deg,#cfe9ff,#a7cfff,#e6f0ff);
+  overflow:hidden;
+  font-family:Arial, sans-serif;
   color:#1f3b63;
-}
-
-/* candy border */
-body::before {
-  content:
-  "💗 be mine   💙 wink wink   💗 hug me   💙 cutie   💗 love you   💙 xoxo   💗 kiss me   💙 mine   ";
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  border:18px solid transparent;
+  border:12px solid #ffd6e8;
   box-sizing:border-box;
-  padding:8px;
-  font-size:14px;
-  display:flex;
-  flex-wrap:wrap;
-  align-content:space-between;
-  justify-content:space-between;
-  opacity:.8;
 }
 
 /* floating hearts */
-.heart {
+.heart{
   position:absolute;
   width:10px;
   height:10px;
@@ -47,9 +28,9 @@ body::before {
   opacity:.6;
 }
 
-@keyframes float {
-  from { transform:translateY(100vh) rotate(45deg); }
-  to { transform:translateY(-10vh) rotate(45deg); }
+@keyframes float{
+  from{transform:translateY(100vh) rotate(45deg);}
+  to{transform:translateY(-10vh) rotate(45deg);}
 }
 
 .hidden{display:none;}
@@ -58,8 +39,8 @@ body::before {
   height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   text-align:center;
 }
 
@@ -75,16 +56,16 @@ body::before {
   position:absolute;
   background:#ffd6e8;
   padding:6px 10px;
-  border-radius:12px;
+  border-radius:14px;
   font-size:11px;
   color:#1f3b63;
-  opacity:.7;
+  opacity:.75;
   animation:float 14s linear infinite;
 }
 
 /* buttons */
 button{
-  background:rgba(255,255,255,.8);
+  background:rgba(255,255,255,.85);
   border:none;
   border-radius:30px;
   padding:12px 22px;
@@ -130,25 +111,33 @@ button{
 
 <body>
 
-<!-- loading screen -->
+<!-- LOADING SCREEN -->
 <div id="load" style="
-position:fixed;top:0;left:0;width:100%;height:100%;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
 background:linear-gradient(135deg,#cfe9ff,#a7cfff,#e6f0ff);
-display:flex;align-items:center;justify-content:center;
-flex-direction:column;z-index:9999;">
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:9999;">
 <div>loading feelings…</div>
 <div style="font-size:12px;margin-top:6px;">building courage…</div>
 </div>
 
+<!-- MUSIC -->
 <audio id="music" loop>
 <source src="fall-in-love-with-you.mp3.mp3">
 </audio>
 
+<!-- INTRO PAGE -->
 <div class="intro" id="intro">
 <p>I’ve been thinking about something for a while.<br>If you would like to continue, press the photo.</p>
-<img src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg.jpg" onclick="go()" />
+<img src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg.jpg" onclick="enterSite()" />
 </div>
 
+<!-- MAIN PAGE -->
 <div class="main hidden" id="main">
 <div>Jabes will you do me the honor of being my valentine</div>
 <div style="font-size:11px;margin-bottom:30px;opacity:.7;">
@@ -163,7 +152,7 @@ flex-direction:column;z-index:9999;">
 
 <script>
 
-/* hide loading */
+/* loading */
 window.onload=()=>{
  setTimeout(()=>document.getElementById("load").style.display="none",2000)
 }
@@ -177,26 +166,15 @@ for(let i=0;i<30;i++){
  document.body.appendChild(h)
 }
 
-/* MANY quotes */
+/* MANY visible quotes */
 let words=[
-"you’re cute",
-"hi :)",
-"thinking of you",
-"smile",
-"hey you",
-"wink",
-"just saying",
-"idk i like you",
-"be mine?",
-"soft boy",
-"cutie",
-"miss you",
-"you matter",
-"hi jabes",
-"okay hi"
+"you’re cute","hi :)","thinking of you","wink",
+"cutie","be mine?","hey you","smile",
+"idk i like you","hi jabes","miss you",
+"soft boy","okay hi","you matter"
 ]
 
-for(let i=0;i<25;i++){
+for(let i=0;i<28;i++){
  let q=document.createElement("div")
  q.className="quote"
  q.innerText=words[Math.floor(Math.random()*words.length)]
@@ -205,14 +183,14 @@ for(let i=0;i<25;i++){
  document.body.appendChild(q)
 }
 
-/* go to main page */
-function go(){
+/* enter site */
+function enterSite(){
  document.getElementById("intro").classList.add("hidden")
  document.getElementById("main").classList.remove("hidden")
  document.getElementById("music").play()
 }
 
-/* yes */
+/* yes click */
 function yes(){
  for(let i=0;i<90;i++){
   let h=document.createElement("div")
