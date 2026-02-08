@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>For A Very Special Boy Named Jabes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap');
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+      cursor: url("data:image/svg+xml;utf8,\
+      <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'>\
+      <text x='0' y='14' font-size='14'>💗</text>\
+      </svg>") 8 8, auto;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #cfe9ff, #a7cfff, #e6f0ff);
+      overflow: hidden;
+      color: #1f3b63;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* FLOATING HEARTS */
+    .heart {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ffd6e8;
+      transform: rotate(45deg);
+      animation: float 10s linear infinite;
+      opacity: 0.6;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ffd6e8;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -5px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -5px;
+      top: 0;
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(100vh) rotate(45deg);
+      }
+      to {
+        transform: translateY(-10vh) rotate(45deg);
+      }
+    }
+
+    /* INTRO */
+    .intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .intro img {
+      width: 260px;
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .intro img:hover {
+      transform: scale(1.05);
+    }
+
+    .intro p {
+      margin-bottom: 20px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* MAIN */
+    .main {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .question {
+      font-size: 20px;
+      max-width: 300px;
+      margin-bottom: 8px;
+    }
+
+    .fineprint {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-bottom: 30px;
+    }
+
+    .buttons button {
+      background: rgba(255,255,255,0.7);
+      border: none;
+      border-radius: 30px;
+      padding: 12px 22px;
+      margin: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .buttons button:hover {
+      background: #ffd6e8;
+      transform: scale(1.05);
+    }
+
+    /* CONFETTI HEARTS */
+    .burst-heart {
+      position: absolute;
+      animation: burst 2s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0% {
+        transform: scale(0) translate(0,0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5) translate(var(--x), var(--y));
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MUSIC -->
+  <audio id="music" loop>
+    <source src="fall-in-love-with-you.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- INTRO -->
+  <div class="intro" id="intro">
+    <p>
+      I’ve been thinking about something for a while.<br>
+      If you would like to continue, press the photo.
+    </p>
+    <img src="B19788B2-CFDA-4E62-BBD9-633152450DDE.jpeg" onclick="enterSite()" />
+  </div>
+
+  <!-- MAIN -->
+  <div class="main hidden" id="main">
+    <div class="question">
+      Jabes, will you do me the honor of being my valentine
+    </div>
+    <div class="fineprint">
+      (even if it’s just as a friend :))
+    </div>
+
+    <div class="buttons">
+      <button onclick="yes()">yes of course</button>
+      <button onclick="no()">no, I’m sorry but I love you</button>
+    </div>
+  </div>
+
+  <script>
+    // floating hearts background
+    for (let i = 0; i < 35; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 8 + Math.random() * 5 + 's';
+      heart.style.opacity = Math.random();
+      document.body.appendChild(heart);
+    }
+
+    function enterSite() {
+      document.getElementById('intro').classList.add('hidden');
+      document.getElementById('main').classList.remove('hidden');
+      document.getElementById('music').play();
+    }
+
+    function yes() {
+      for (let i = 0; i < 90; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'burst-heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = '50%';
+        heart.style.top = '50%';
+        heart.style.fontSize = 14 + Math.random() * 30 + 'px';
+        heart.style.setProperty('--x', (Math.random() * 500 - 250) + 'px');
+        heart.style.setProperty('--y', (Math.random() * 500 - 250) + 'px');
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+      }
+    }
+
+    function no() {
+      alert("still love you 💙");
+    }
+  </script>
+
+</body>
+</html>
