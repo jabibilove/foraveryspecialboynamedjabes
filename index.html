@@ -44,6 +44,7 @@ body{
   transform:rotate(45deg);
   animation:float 10s linear infinite;
   opacity:.6;
+  pointer-events:none;
 }
 
 @keyframes float{
@@ -51,7 +52,7 @@ body{
   to{transform:translateY(-10vh) rotate(45deg);}
 }
 
-/* quote bubbles */
+/* QUOTE BUBBLES — FIXED */
 .quote{
   position:absolute;
   background:#ffd6e8;
@@ -61,6 +62,7 @@ body{
   color:#1f3b63;
   opacity:.85;
   animation:float 14s linear infinite;
+  pointer-events:none; /* THIS makes them not block clicks */
 }
 
 /* buttons */
@@ -75,6 +77,7 @@ button{
   transition:.3s;
 }
 
+/* heartbeat animation */
 @keyframes beat{
   0%{transform:scale(1);}
   50%{transform:scale(1.08);}
@@ -99,6 +102,7 @@ button{
 .burst{
   position:absolute;
   animation:burst 2s forwards;
+  pointer-events:none;
 }
 
 @keyframes burst{
@@ -134,7 +138,7 @@ button{
 
 <script>
 
-/* attach click reliably */
+/* click photo — reliable */
 document.getElementById("enterPhoto").addEventListener("click", function(){
   document.getElementById("intro").style.display="none";
   document.getElementById("main").classList.remove("hidden");
@@ -143,64 +147,69 @@ document.getElementById("enterPhoto").addEventListener("click", function(){
 
 /* floating hearts */
 for(let i=0;i<30;i++){
- let h=document.createElement("div");
- h.className="heart";
- h.style.left=Math.random()*100+"vw";
- h.style.animationDuration=8+Math.random()*5+"s";
- document.body.appendChild(h);
+ let h=document.createElement("div")
+ h.className="heart"
+ h.style.left=Math.random()*100+"vw"
+ h.style.animationDuration=8+Math.random()*5+"s"
+ document.body.appendChild(h)
 }
 
-/* lots of quotes */
+/* MANY quote bubbles but avoid center area */
 let words=[
 "you’re cute","hi :)","thinking of you","wink",
 "cutie","be mine?","hey you","smile",
 "idk i like you","hi jabes","miss you",
 "soft boy","okay hi","you matter"
-];
+]
 
 for(let i=0;i<28;i++){
- let q=document.createElement("div");
- q.className="quote";
- q.innerText=words[Math.floor(Math.random()*words.length)];
- q.style.left=Math.random()*100+"vw";
- q.style.top=Math.random()*100+"vh";
- document.body.appendChild(q);
+ let q=document.createElement("div")
+ q.className="quote"
+ q.innerText=words[Math.floor(Math.random()*words.length)]
+ q.style.left=Math.random()*100+"vw"
+
+ let pos=Math.random()*100
+ if(pos>35 && pos<65){pos+=25}
+ q.style.top=pos+"vh"
+
+ document.body.appendChild(q)
 }
 
-/* yes */
+/* YES */
 document.getElementById("yesBtn").addEventListener("click", function(){
  for(let i=0;i<90;i++){
-  let h=document.createElement("div");
-  h.className="burst";
-  h.innerHTML="❤️";
-  h.style.left="50%";
-  h.style.top="50%";
-  h.style.fontSize=14+Math.random()*30+"px";
-  h.style.setProperty("--x",(Math.random()*500-250)+"px");
-  h.style.setProperty("--y",(Math.random()*500-250)+"px");
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),2000);
+  let h=document.createElement("div")
+  h.className="burst"
+  h.innerHTML="❤️"
+  h.style.left="50%"
+  h.style.top="50%"
+  h.style.fontSize=14+Math.random()*30+"px"
+  h.style.setProperty("--x",(Math.random()*500-250)+"px")
+  h.style.setProperty("--y",(Math.random()*500-250)+"px")
+  document.body.appendChild(h)
+  setTimeout(()=>h.remove(),2000)
  }
- document.getElementById("yesMessage").style.opacity=1;
-});
+ document.getElementById("yesMessage").style.opacity=1
+})
 
 /* runaway no */
 document.getElementById("noBtn").addEventListener("mouseover", function(){
- this.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`;
-});
+ this.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`
+})
 
 /* heart trail */
 document.addEventListener("mousemove",e=>{
- let h=document.createElement("div");
- h.innerHTML="💗";
- h.style.position="absolute";
- h.style.left=e.pageX+"px";
- h.style.top=e.pageY+"px";
- h.style.fontSize="10px";
- document.body.appendChild(h);
- setTimeout(()=>h.remove(),600);
-});
-
+ let h=document.createElement("div")
+ h.innerHTML="💗"
+ h.style.position="absolute"
+ h.style.left=e.pageX+"px"
+ h.style.top=e.pageY+"px"
+ h.style.fontSize="10px"
+ h.style.pointerEvents="none"
+ document.body.appendChild(h)
+ setTimeout(()=>h.remove(),600)
+})
 </script>
+
 </body>
 </html>
